@@ -1,6 +1,18 @@
 import axios from "axios";
 import { parseStringPromise } from "xml2js";
 
+// ✅ 출원번호 포맷: 4020090039000 → 40-2009-0039000
+const formatAppNumber = (raw) => {
+  if (!raw || raw.length !== 13) return raw;
+  return `${raw.slice(0, 2)}-${raw.slice(2, 6)}-${raw.slice(6)}`;
+};
+
+// ✅ 출원일 포맷: 20200917 → 2020-09-17
+const formatDate = (raw) => {
+  if (!raw || raw.length !== 8) return raw;
+  return `${raw.slice(0, 4)}-${raw.slice(4, 6)}-${raw.slice(6)}`;
+};
+
 export default async function handler(req, res) {
   const { keyword } = req.query;
 
@@ -24,9 +36,9 @@ export default async function handler(req, res) {
 
     const simplified = results.map((item) => ({
       title: item.title || "",
-      applicationNumber: item.applicationNumber || "",
+      applicationNumber: formatAppNumber(item.applicationNumber || ""),
       applicantName: item.applicantName || "",
-      applicationDate: item.applicationDate || "",
+      applicationDate: formatDate(item.applicationDate || ""),
       applicationStatus: item.applicationStatus || "",
       drawingUrl: item.drawing || ""
     }));
