@@ -8,7 +8,7 @@ app.use(cors());
 
 const PORT = process.env.PORT || 3000;
 
-// GET /search?keyword=카카오
+// ✅ 핵심 API: /search?keyword=카카오
 app.get("/search", async (req, res) => {
   const keyword = req.query.keyword;
   const serviceKey = "7TRQDcz1tY0Lqz5UvhNj9pxUuCiFRcoEgpv7iy0A8Bo=";
@@ -37,7 +37,7 @@ app.get("/search", async (req, res) => {
       applicantName: item.applicantName || "",
       applicationDate: item.applicationDate || "",
       applicationStatus: item.applicationStatus || "",
-      drawingUrl: item.drawing || "",
+      drawingUrl: item.drawing || ""
     }));
 
     res.json(simplified);
@@ -45,6 +45,11 @@ app.get("/search", async (req, res) => {
     console.error(err);
     res.status(500).json({ error: "Failed to fetch or parse data from KIPRIS" });
   }
+});
+
+// 기본 루트 확인용
+app.get("/", (req, res) => {
+  res.send("✅ KIPRIS Proxy Server is running");
 });
 
 app.listen(PORT, () => {
