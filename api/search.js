@@ -1,5 +1,5 @@
-const axios = require("axios");
-const xml2js = require("xml2js");
+import axios from "axios";
+import { parseStringPromise } from "xml2js";
 
 export default async function handler(req, res) {
   const { keyword } = req.query;
@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
   try {
     const { data: xml } = await axios.get(url);
-    const json = await xml2js.parseStringPromise(xml, { explicitArray: false });
+    const json = await parseStringPromise(xml, { explicitArray: false });
 
     const items = json?.response?.body?.items?.item;
     if (!items) {
